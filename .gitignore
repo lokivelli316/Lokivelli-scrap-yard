@@ -1,0 +1,29 @@
+# Never commit secrets or local environment files
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+
+# Common credential/config spill
+credentials.json
+service-account*.json
+secrets.*
+*.secret
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Runtime/build junk
+node_modules/
+__pycache__/
+*.pyc
+.cache/
+.tmp/
+tmp/
