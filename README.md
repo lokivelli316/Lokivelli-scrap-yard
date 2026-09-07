@@ -9,7 +9,7 @@ This repository is a **public working window**, not a vault and not a canonical 
 - `main` stays small and permanent.
 - Active work goes on a disposable build branch.
 - A build branch contains only the files needed for the current job.
-- When the build is finished and promoted back to its real home, the temporary branch can be deleted.
+- Every deliberate/named build version must be copied to the private `Lokivelli-garage` before the public branch is purged.
 - The next job starts from a fresh build branch.
 
 ## Authority rule
@@ -28,6 +28,23 @@ Everything committed here must be treated as permanently public, even if its bra
 - secrets embedded in config files, logs, exports, environment files, or archives.
 
 Branch deletion is cleanup, **not retroactive privacy**.
+
+## Garage-before-purge rule
+
+A public build branch must not be deleted until its deliberate/named build version has completed the following transfer gate:
+
+1. Freeze the current named build version in the Scrap Yard.
+2. Copy/clone that version into the private `lokivelli316/Lokivelli-garage`.
+3. Verify the Garage copy contains the expected files and entry points.
+4. Record the source branch, source commit/SHA, version identifier, Garage destination, and verification result.
+5. Mark the Garage intake as accepted only after verification passes.
+6. Only then may the corresponding public Scrap Yard branch be purged.
+
+**No verified Garage copy + no receipt = no purge.**
+
+For this rule, a "version" means a deliberate build snapshot such as `v0.3.0`, `RC2`, `ticker-v4`, or another explicitly named handoff state. It does **not** mean every autosave or tiny intermediate commit.
+
+If a build contains very large binary assets, the Garage receipt may point to the private canonical asset location plus hashes instead of duplicating unchanged binaries into every version. The public build slice still must remain recoverable from the Garage record.
 
 ## Build-branch layout
 
@@ -84,13 +101,17 @@ disposable public build branch
         ↓
 GPT / builder / auditor
         ↓
-verify result
+freeze named version
         ↓
-promote accepted work to real project
+copy/clone to private Lokivelli-garage
         ↓
-delete disposable branch
+verify + receipt
+        ↓
+promote accepted work as appropriate
+        ↓
+purge disposable public branch
         ↓
 start next fresh branch
 ```
 
-**Scrap yard means temporary. The good parts leave. The yard gets cleared.**
+**Scrap Yard means temporary. The good parts leave. The yard gets cleared.**
